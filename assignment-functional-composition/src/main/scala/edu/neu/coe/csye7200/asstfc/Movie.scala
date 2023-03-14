@@ -102,7 +102,14 @@ object Movie extends App {
   object MoviesProtocol extends DefaultJsonProtocol {
     // 20 points
     // TO BE IMPLEMENTED
-    ???
+    implicit val formatSERFormat: RootJsonFormat[Format] = jsonFormat4(Format.apply)
+    implicit val productionFormat: RootJsonFormat[Production] = jsonFormat4(Production.apply)
+    implicit val ratingFormat: RootJsonFormat[Rating] = jsonFormat2(Rating.apply)
+    implicit val reviewsFormat: RootJsonFormat[Reviews] = jsonFormat7(Reviews.apply)
+    implicit val nameFormat: RootJsonFormat[Name] = jsonFormat4(Name.apply)
+    implicit val principalFormat: RootJsonFormat[Principal] = jsonFormat2(Principal.apply)
+    implicit val movieFormat: RootJsonFormat[Movie] = jsonFormat11(Movie.apply)
+
   }
 
   implicit object IngestibleMovie extends IngestibleMovie
@@ -123,7 +130,13 @@ object Movie extends App {
   def testSerializationAndDeserialization(ms: Seq[Movie]): Boolean = {
     // 5 points
     // TO BE IMPLEMENTED
-    ???
+    import MoviesProtocol._
+    // for (m<-ms) {
+    //  if (m != m.toJson.convertTo[Movie])  false
+    // }
+    // true
+    val SerializeAndDeserialize = ms.map(_.toJson.convertTo[Movie])
+    ms == SerializeAndDeserialize
   }
 
   def getMoviesFromCountry(country: String, movies: Iterator[Try[Movie]]): Try[Seq[Movie]] = {
